@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 
 import { DemoProgressBar } from "@/components/demo/progress-bar";
 import { GraduationBadge } from "@/components/demo/graduation-badge";
+import { ONBOARDING_STORAGE_KEY } from "@/components/onboarding-flow";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCourseDemo } from "@/components/course-demo-provider";
@@ -79,6 +80,8 @@ export default function Home() {
     if (!confirmed) return;
 
     resetDemo();
+    window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+    window.dispatchEvent(new Event("demo:show-onboarding"));
   };
   const [showGamificationModal, setShowGamificationModal] = useState(false);
 

@@ -9,6 +9,7 @@ import {
   Target,
 } from "lucide-react";
 import {
+  useEffect,
   useMemo,
   useState,
   useSyncExternalStore,
@@ -18,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-const ONBOARDING_STORAGE_KEY = "creadores_en_potencia_onboarding_seen_v1";
+export const ONBOARDING_STORAGE_KEY = "creadores_en_potencia_onboarding_seen_v1";
 
 type OnboardingStep = {
   title: string;
@@ -58,7 +59,18 @@ export function OnboardingFlow({ children }: { children: ReactNode }) {
   const [stepIndex, setStepIndex] = useState(0);
 
   const hasSeenOnboarding = useSyncExternalStore(
-    () => () => undefined,
+    (onStoreChange) => {
+      const handleStorage = () => onStoreChange();
+      const handleManualTrigger = () => onStoreChange();
+
+      window.addEventListener("storage", handleStorage);
+      window.addEventListener("demo:show-onboarding", handleManualTrigger);
+
+      return () => {
+        window.removeEventListener("storage", handleStorage);
+        window.removeEventListener("demo:show-onboarding", handleManualTrigger);
+      };
+    },
     () => window.localStorage.getItem(ONBOARDING_STORAGE_KEY) === "1",
     () => true
   );
@@ -84,6 +96,17 @@ export function OnboardingFlow({ children }: { children: ReactNode }) {
   const handleBack = () => {
     setStepIndex((current) => Math.max(0, current - 1));
   };
+
+  useEffect(() => {
+    const handleManualTrigger = () => {
+      setIsDismissed(false);
+      setStepIndex(0);
+    };
+
+    window.addEventListener("demo:show-onboarding", handleManualTrigger);
+    return () =>
+      window.removeEventListener("demo:show-onboarding", handleManualTrigger);
+  }, []);
 
   return (
     <>

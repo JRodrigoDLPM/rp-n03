@@ -354,13 +354,13 @@ export function CourseDemoProvider({ children }: { children: ReactNode }) {
   const resetDemo = () => {
     setTotalPoints(INITIAL_POINTS);
     setStreakDays(INITIAL_STREAK_DAYS);
-    setCompletedModules([...INITIAL_COMPLETED_MODULE_IDS]);
-    setCompletedVideoIds([...INITIAL_COMPLETED_VIDEO_IDS]);
-    setSubmittedDeliverables([...INITIAL_COMPLETED_DELIVERABLE_IDS]);
+    setCompletedModules([]);
+    setCompletedVideoIds([]);
+    setSubmittedDeliverables([]);
     setDailyCommentsCount(0);
     setWeeklyStreakRewardClaimed(false);
     setGraduationRewardClaimed(false);
-    setActiveIndex(INITIAL_ACTIVE_INDEX);
+    setActiveIndex(0);
     setCurrentStepState("idle");
     setFlowModuleId(null);
     setLatestPointEvent(null);
